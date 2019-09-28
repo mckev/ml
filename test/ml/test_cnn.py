@@ -1,11 +1,11 @@
-from unittest import TestCase
+import unittest
 
 import numpy
 
 from classes.ml.cnn import Cnn
 
 
-class TestCnn(TestCase):
+class TestCnn(unittest.TestCase):
 
     def test_convolve(self):
         # Ref: https://medium.com/datadriveninvestor/convolution-neural-networks-vs-fully-connected-neural-networks-8171a6e86f15

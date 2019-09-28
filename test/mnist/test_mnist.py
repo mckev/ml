@@ -1,9 +1,9 @@
-from unittest import TestCase
+import unittest
 
 from classes.mnist.mnist import Mnist
 
 
-class TestMnist(TestCase):
+class TestMnist(unittest.TestCase):
 
     def test_retrieve_mnist_datas(self):
         mnist_datas = Mnist.retrieve_mnist_datas(filename='../../classes/mnist/mnist.raw')
