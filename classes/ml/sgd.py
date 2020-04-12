@@ -25,6 +25,11 @@ class Sgd:
     def sigmoid_prime(z: List[float]) -> List[float]:
         return Sgd.sigmoid(z) * (1 - Sgd.sigmoid(z))
 
+    @staticmethod
+    def softmax(z: List[float]) -> List[float]:
+        # Typically used to turn logits into probabilities that sum to one
+        return numpy.exp(z) / numpy.sum(numpy.exp(z))
+
     def __init__(self, sizes: List[int]):
         # The list "sizes" contains the number of neurons in the respective layers of the network. For example, if the list was [2, 3, 1] then it would be a three-layer network, with the first layer containing 2 neurons, the second layer 3 neurons, and the third layer 1 neuron.
         self.num_layers: int = len(sizes)

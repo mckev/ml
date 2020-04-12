@@ -32,7 +32,8 @@ class TestSgdMnist(unittest.TestCase):
             normalized_input = input / 255
             number = mnist_data['number']
             output: List[float] = sgd.feed_forward(input=normalized_input)
-            output_index = numpy.argmax(output)
+            output_prob: List[float] = sgd.softmax(z=output)
+            output_index = numpy.argmax(output_prob)
             if output_index == number:
                 correct += 1
             total += 1

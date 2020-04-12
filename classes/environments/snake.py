@@ -40,7 +40,6 @@ class Snake:
 
 
 class Board:
-    BOARD_SIZE = 5
     ALL_DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
     CH_EMPTY = ' '

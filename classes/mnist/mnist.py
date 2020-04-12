@@ -5,9 +5,9 @@ class Mnist:
     IMAGE_SIZE = 28
 
     @staticmethod
-    def draw_mnist_data(mnist_data):
+    def show_mnist_data(mnist_data):
         pos = 0
-        print(f'Number: {mnist_data["number"]}')
+        stdout = [f'Number: {mnist_data["number"]}']
         for _ in range(mnist_data['image_size']):
             line = ''
             for _ in range(mnist_data['image_size']):
@@ -17,7 +17,8 @@ class Mnist:
                 else:
                     line += ' '
                 pos += 1
-            print(line)
+            stdout.append(line)
+        return stdout
 
     @staticmethod
     def retrieve_mnist_datas(filename: str) -> List[any]:
