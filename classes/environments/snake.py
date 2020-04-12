@@ -80,6 +80,7 @@ class Board:
             if self.get_ch(food_pos) == Board.CH_EMPTY:
                 break
         self.put_ch(food_pos, Board.CH_FOOD)
+        self.food_pos = food_pos
 
     def draw(self):
         for y in range(self.board_size):
