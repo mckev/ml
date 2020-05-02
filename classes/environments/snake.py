@@ -2,13 +2,14 @@ import random
 
 
 class Snake:
-    def __init__(self, world):
-        while True:
-            pos = (random.randint(0, world.board_size - 1), random.randint(0, world.board_size - 1))
-            if world.get_ch(pos) == World.CH_EMPTY:
-                break
+    def __init__(self, world, pos=None):
+        if pos is None:
+            while True:
+                pos = (random.randint(0, world.board_size - 1), random.randint(0, world.board_size - 1))
+                if world.get_ch(pos) == World.CH_EMPTY:
+                    break
         world.put_ch(pos, World.CH_SNAKE_HEAD)
-        self._world = world
+        self._world: World = world
         self._snake = [pos]
 
     def head_pos(self) -> (int, int):
@@ -43,13 +44,28 @@ class Snake:
         else:
             raise Exception(f'Invalid character encountered at pos {new_head_pos}: {ch}')
 
+    def get_visions(self, vision_len):
+        snake_head_x, snake_head_y = self.head_pos()
+        visions = []
+        for y in range(snake_head_y - vision_len, snake_head_y + vision_len + 1):
+            vision = []
+            for x in range(snake_head_x - vision_len, snake_head_x + vision_len + 1):
+                if 0 <= x < self._world.board_size and 0 <= y < self._world.board_size:
+                    ch = self._world.get_ch((x, y))
+                else:
+                    ch = World.CH_OBSTACLE
+                vision.append(ch)
+            visions.append(vision)
+        return visions
+
 
 class Food:
-    def __init__(self, world):
-        while True:
-            pos = (random.randint(0, world.board_size - 1), random.randint(0, world.board_size - 1))
-            if world.get_ch(pos) == World.CH_EMPTY:
-                break
+    def __init__(self, world, pos=None):
+        if pos is None:
+            while True:
+                pos = (random.randint(0, world.board_size - 1), random.randint(0, world.board_size - 1))
+                if world.get_ch(pos) == World.CH_EMPTY:
+                    break
         world.put_ch(pos, World.CH_FOOD)
         self._food_pos = pos
 
@@ -58,7 +74,11 @@ class Food:
 
 
 class World:
-    ALL_DIRECTIONS = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    DIRECTION_LEFT = (-1, 0)
+    DIRECTION_RIGHT = (1, 0)
+    DIRECTION_UP = (0, -1)
+    DIRECTION_DOWN = (0, 1)
+    ALL_DIRECTIONS = [DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_UP, DIRECTION_DOWN]
 
     CH_EMPTY = ' '
     CH_OBSTACLE = 'X'
@@ -79,11 +99,11 @@ class World:
         self.snake = None
         self.food = None
 
-    def init_snake(self):
-        self.snake = Snake(self)
+    def init_snake(self, pos=None):
+        self.snake = Snake(self, pos)
 
-    def init_food(self):
-        self.food = Food(self)
+    def init_food(self, pos=None):
+        self.food = Food(self, pos)
 
     def get_ch(self, pos) -> str:
         (x, y) = pos
