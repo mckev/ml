@@ -29,16 +29,16 @@ class TestSgd(unittest.TestCase):
         self.assertEqual(output, [0.19661193324148185, 0.25, 0.19661193324148185])
 
     def test_softmax_01(self):
-        z = numpy.array([2.0, 1.0, 0.1])
+        z = numpy.array([2.0, 1.0, 0.0])
         output = Sgd.softmax(z).tolist()
-        self.assertEqual(output, [0.6590011388859679, 0.2424329707047139, 0.09856589040931818])
+        self.assertEqual(output, [0.6652409557748219, 0.24472847105479764, 0.09003057317038046])
         self.assertAlmostEqual(sum(output), 1.0)
 
     def test_softmax_02(self):
-        z = numpy.array([2.0, 1.0, 0.1, 0.0, -0.1, -1.0, -2.0])
+        z = numpy.array([2.0, 1.0, 0.0, -1.0, -2.0])
         output = Sgd.softmax(z).tolist()
-        self.assertEqual(output, [0.5424927875944123, 0.19957194353977034, 0.08113989717873449, 0.07341841506290936,
-                                  0.0664317291218153, 0.027009125505036098, 0.00993610199732203])
+        self.assertEqual(output, [0.6364086465588308, 0.23412165725273662, 0.0861285444362687, 0.03168492079612427,
+                                  0.011656230956039609])
         self.assertAlmostEqual(sum(output), 1.0)
 
     def test_learn_xnor_operations(self):

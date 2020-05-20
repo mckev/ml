@@ -33,7 +33,7 @@ model.add(keras.layers.Dense(10, activation='softmax'))
 model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
 
 print('Training...')
-model.fit(x_train_new, y_train_new, batch_size=10, epochs=1)
+model.fit(x_train_new, y_train_new, epochs=1)
 
 print('Predicting...')
 correct = 0
