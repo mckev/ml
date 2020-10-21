@@ -60,32 +60,43 @@ class TestKerasGenetic(unittest.TestCase):
 
         NUM_POPULATION = 20
 
-        print('Generating model...')
-        models = []
+        print('Generating individuals...')
+        individuals = []
         for _ in range(NUM_POPULATION):
             model = TestKerasGenetic.generate_model()
-            models.append(model)
+            individuals.append({
+                'model': model,
+                'score': None
+            })
 
         print('Evolution...')
         while True:
-            best_model = None
-            min_percent_correct = sys.maxsize
             max_percent_correct = 0
-            for model in models:
-                percent_correct = 100 * TestKerasGenetic.count_correct_ratio(model, mnist_datas[60000:])
-                if percent_correct > max_percent_correct:
-                    best_model = model
+            min_percent_correct = sys.maxsize
+            for individual in individuals:
+                percent_correct = 100 * TestKerasGenetic.count_correct_ratio(individual['model'], mnist_datas[60000:])
+                individual['score'] = percent_correct
                 max_percent_correct = max(max_percent_correct, percent_correct)
                 min_percent_correct = min(min_percent_correct, percent_correct)
             print(f'Percent correct {min_percent_correct:.1f}% - {max_percent_correct:.1f}%')
+            individuals = sorted(individuals, key=lambda el: el['score'], reverse=True)
 
-            # Now use this best model as a template for the population
-            models = []
-            for _ in range(NUM_POPULATION):
-                model = keras.models.clone_model(best_model)  # Notice this does not copy the internal weights
-                weights = best_model.get_weights()
-                # We do mutation
+            # Now use the best individuals as template for the new generation
+            new_individuals = []
+            for n in range(NUM_POPULATION):
+                new_model = keras.models.clone_model(individuals[0]['model'])  # This does not copy the internal weights
+                if n < NUM_POPULATION / 2:
+                    # Retain the best half of the population
+                    weights = individuals[n]['model'].get_weights()
+                else:
+                    # For the other half of the population, we use the best one (i.e. individuals[0])
+                    weights = individuals[0]['model'].get_weights()
+                # Do mutation
                 for layer in weights:
                     Genetic.mutate(layer, prob_mutation=0.2, mu=0.0, sigma=0.1)
-                model.set_weights(weights)
-                models.append(model)
+                new_model.set_weights(weights)
+                new_individuals.append({
+                    'model': new_model,
+                    'score': None
+                })
+            individuals = new_individuals
