@@ -72,28 +72,3 @@ class TestSnakeWorld(unittest.TestCase):
             ['X', '*', ' ', 'X'],
             ['X', 'X', 'X', 'X']
         ])
-
-    def test_snake_visions(self):
-        world = World(board_size=4)
-        world.init_snake((2, 1))
-        world.init_food((1, 2))
-        self.assertEqual(world.board, [
-            ['X', 'X', 'X', 'X'],
-            ['X', ' ', 'h', 'X'],
-            ['X', 'f', ' ', 'X'],
-            ['X', 'X', 'X', 'X']
-        ])
-        snake_visions = world.snake.get_visions(vision_len=1)
-        self.assertEqual(snake_visions, [
-            ['X', 'X', 'X'],
-            [' ', 'h', 'X'],
-            ['f', ' ', 'X']
-        ])
-        snake_visions = world.snake.get_visions(vision_len=2)
-        self.assertEqual(snake_visions, [
-            ['X', 'X', 'X', 'X', 'X'],
-            ['X', 'X', 'X', 'X', 'X'],
-            ['X', ' ', 'h', 'X', 'X'],
-            ['X', 'f', ' ', 'X', 'X'],
-            ['X', 'X', 'X', 'X', 'X']
-        ])

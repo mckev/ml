@@ -58,12 +58,22 @@ class Snake:
         world.put_ch(pos, World.CH_SNAKE_HEAD)
         self._world: World = world
         self._snake_pos = [pos]
+        self._snake_directions = [None]
 
     def head_pos(self) -> (int, int):
         return self._snake_pos[-1]
 
+    def head_direction(self) -> (int, int):
+        return self._snake_directions[-1]
+
     def tail_pos(self) -> (int, int):
         return self._snake_pos[0]
+
+    def tail_direction(self) -> (int, int):
+        return self._snake_directions[0]
+
+    def len(self) -> int:
+        return len(self._snake_pos)
 
     def move(self, direction) -> str:
         if direction not in World.ALL_DIRECTIONS:
@@ -75,9 +85,11 @@ class Snake:
         if ch == World.CH_EMPTY:
             self._world.put_ch(self.head_pos(), World.CH_SNAKE)
             self._snake_pos.append(new_head_pos)
+            self._snake_directions.append(direction)
             self._world.put_ch(self.head_pos(), World.CH_SNAKE_HEAD)
             self._world.put_ch(self.tail_pos(), World.CH_EMPTY)
             self._snake_pos.pop(0)
+            self._snake_directions.pop(0)
             return ch
         elif ch == World.CH_OBSTACLE:
             return ch
@@ -86,24 +98,11 @@ class Snake:
         elif ch == World.CH_FOOD:
             self._world.put_ch(self.head_pos(), World.CH_SNAKE)
             self._snake_pos.append(new_head_pos)
+            self._snake_directions.append(direction)
             self._world.put_ch(self.head_pos(), World.CH_SNAKE_HEAD)
             return ch
         else:
             raise Exception(f'Invalid character encountered at pos {new_head_pos}: {ch}')
-
-    def get_visions(self, vision_len: int):
-        snake_head_x, snake_head_y = self.head_pos()
-        visions = []
-        for y in range(snake_head_y - vision_len, snake_head_y + vision_len + 1):
-            vision = []
-            for x in range(snake_head_x - vision_len, snake_head_x + vision_len + 1):
-                if 0 <= x < self._world.board_size and 0 <= y < self._world.board_size:
-                    ch = self._world.get_ch((x, y))
-                else:
-                    ch = World.CH_OBSTACLE
-                vision.append(ch)
-            visions.append(vision)
-        return visions
 
 
 class Food:
