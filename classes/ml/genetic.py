@@ -31,7 +31,7 @@ class Genetic:
 
     @staticmethod
     def mutate(chromosome: numpy.ndarray, prob_mutation: float,
-               mu: float = None, sigma: float = None,
+               mu: Optional[float] = None, sigma: Optional[float] = None,
                scale: Optional[float] = None) -> None:
         # Ref: https://github.com/Chrispresso/SnakeAI/blob/master/genetic_algorithm/mutation.py
         """
