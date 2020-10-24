@@ -93,7 +93,7 @@ class TestKerasGenetic(unittest.TestCase):
                     weights = individuals[0]['model'].get_weights()
                 # Do mutation
                 for layer in weights:
-                    Genetic.mutate(layer, prob_mutation=0.2, mu=0.0, sigma=0.1)
+                    Genetic.mutate(layer, prob_mutation=0.05, scale=0.2)
                 new_model.set_weights(weights)
                 new_individuals.append({
                     'model': new_model,

@@ -49,8 +49,8 @@ class Genetic:
             # Otherwise center around N(0,1)
             gaussian_mutation = numpy.random.normal(size=chromosome.shape)
 
-        if scale:
-            gaussian_mutation[mutation_array] *= scale
+        if scale is not None:
+            gaussian_mutation *= scale
 
         # Update
         chromosome[mutation_array] += gaussian_mutation[mutation_array]
