@@ -74,6 +74,36 @@ class Genetic:
             raise NotImplementedError
 
     @staticmethod
+    def crossover_multi_points(parent1: numpy.ndarray, parent2: numpy.ndarray, prob_crossover: float, major='r'):
+        offspring1 = parent1.copy()
+        offspring2 = parent2.copy()
+
+        if len(parent2.shape) == 1:
+            # 1 dimension shape
+            (rows,) = parent2.shape
+            if major == 'r':
+                mask = numpy.random.random(size=(rows,)) < prob_crossover
+                offspring1[mask] = parent2[mask]
+                offspring2[mask] = parent1[mask]
+            elif major == 'c':
+                raise NotImplementedError
+            return offspring1, offspring2
+
+        elif len(parent2.shape) == 2:
+            # 2 dimensions shape
+            rows, cols = parent2.shape
+            if major == 'r':
+                mask = numpy.random.random(size=(rows,)) < prob_crossover
+                offspring1[mask, :] = parent2[mask, :]
+                offspring2[mask, :] = parent1[mask, :]
+            elif major == 'c':
+                raise NotImplementedError
+            return offspring1, offspring2
+
+        else:
+            raise NotImplementedError
+
+    @staticmethod
     def mutate(chromosome: numpy.ndarray, prob_mutation: float,
                mu: Optional[float] = None, sigma: Optional[float] = None,
                scale: Optional[float] = None) -> None:

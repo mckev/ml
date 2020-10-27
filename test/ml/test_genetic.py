@@ -35,7 +35,7 @@ class TestGenetic(unittest.TestCase):
                     self.assertTrue(child1[y][x] == TestGenetic.matrix2[y][x])
                     self.assertTrue(child2[y][x] == TestGenetic.matrix1[y][x])
         percent_crossover = num_crossover / (total_rows * total_cols)
-        self.assertTrue(0.1 < percent_crossover < 0.5)
+        self.assertTrue(0.1 < percent_crossover < 0.5)  # Not always true (this is only for documentation)
 
     def test_crossover_single_point(self):
         child1, child2 = Genetic.crossover_single_point(TestGenetic.matrix1, TestGenetic.matrix2)
@@ -52,6 +52,20 @@ class TestGenetic(unittest.TestCase):
                 self.assertTrue(child2[y].tolist() == TestGenetic.matrix2[y].tolist())
         self.assertTrue(0 <= crossover_row < total_rows)
 
+    def test_crossover_multi_points(self):
+        child1, child2 = Genetic.crossover_multi_points(TestGenetic.matrix1, TestGenetic.matrix2, prob_crossover=0.3)
+        total_rows, _ = TestGenetic.matrix1.shape
+        num_crossover = 0
+        for y in range(total_rows):
+            if child1[y].tolist() == TestGenetic.matrix1[y].tolist():
+                self.assertTrue(child2[y].tolist() == TestGenetic.matrix2[y].tolist())
+            else:
+                num_crossover += 1
+                self.assertTrue(child1[y].tolist() == TestGenetic.matrix2[y].tolist())
+                self.assertTrue(child2[y].tolist() == TestGenetic.matrix1[y].tolist())
+        percent_crossover = num_crossover / total_rows
+        self.assertTrue(0.1 < percent_crossover < 0.5)  # Not always true (this is only for documentation)
+
     def test_mutate(self):
         matrix1 = numpy.copy(TestGenetic.matrix1)
         Genetic.mutate(matrix1, prob_mutation=0.3, scale=0.2)
@@ -64,4 +78,4 @@ class TestGenetic(unittest.TestCase):
                     delta = abs(TestGenetic.matrix1[y][x] - matrix1[y][x])
                     self.assertLess(delta, 1.0)
         percent_mutation = total_mutation / (total_rows * total_cols)
-        self.assertTrue(0.1 < percent_mutation < 0.5)
+        self.assertTrue(0.1 < percent_mutation < 0.5)  # Not always true (this is only for documentation)
